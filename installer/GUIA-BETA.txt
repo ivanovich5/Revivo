@@ -1,0 +1,36 @@
+REVIVO 0.9.8 — BETA LOCAL DE VALIDACIÓN
+
+Esta compilación no está autorizada todavía para distribución pública.
+Requiere Windows 11 x64. Incluye los componentes de ejecución necesarios.
+
+1. Instala Revivo en el disco de la computadora, nunca en la USB de origen.
+2. Selecciona la USB por modelo y capacidad. Guarda la copia y los resultados
+   en otro disco con espacio suficiente. La lectura puede pedir administrador.
+3. Revisa los archivos encontrados. Selecciona uno, varios o todos y guarda
+   en una carpeta con el nombre que elijas. No sobrescribas la USB original.
+4. Comprueba los archivos importantes y conserva otra copia independiente.
+
+Encontrar un archivo o mostrarlo no garantiza que esté completo. El diagnóstico
+de lectura no certifica escritura, capacidad real, retención ni salud física.
+La recuperación y las vistas se procesan localmente. No adjuntes documentos
+privados al reportar errores; describe pasos, versión, formato y mensaje.
+
+Para desinstalar: Configuración de Windows > Aplicaciones > Revivo.
+Los resultados guardados fuera de la instalación deben permanecer intactos.
+No guardes recuperaciones dentro de la carpeta del programa.
+
+Esta beta no tiene firma digital de editor. No se han validado aún instalación
+en Windows limpio, comportamiento del antivirus ni recuperación en otro equipo.
+Las pruebas automatizadas utilizan imágenes sintéticas, sin acceso a USB reales.
+
+Consulta THIRD_PARTY.md y platform-notices para avisos de componentes.
+El código propio se ofrece bajo AGPL-3.0. La entrega completa de fuentes de
+dependencias todavía se está revisando. No hay un canal público de soporte
+configurado; durante estas pruebas entrega el informe al responsable del proyecto.
+
+RECUPERACIONES ANTERIORES
+Pulsa Abrir recuperación en el menú principal y elige la carpeta de tu caso
+ o la carpeta general de resultados. Revivo localizará los archivos de control.
+Si hay vistas listas, las abre. Si faltan, las prepara desde los archivos guardados.
+Si solo hay una imagen, pulsa Buscar en la copia para analizarla sin conectar la USB.
+Ver carpeta guardada permite localizar tus resultados en el Explorador.

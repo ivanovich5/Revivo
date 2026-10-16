@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWPF>true</UseWPF><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>Revivo</AssemblyName><Product>Revivo</Product><ApplicationIcon>Brand/revivo.ico</ApplicationIcon><Version>0.9.17</Version><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+  <ItemGroup><ProjectReference Include="../Rescate.Core/Rescate.Core.csproj" /></ItemGroup>
+<ItemGroup><Resource Include="Brand/logo.png"/><Resource Include="Brand/Silkscreen-Regular.ttf"/><Resource Include="Brand/revivo.ico"/></ItemGroup></Project>
+
+

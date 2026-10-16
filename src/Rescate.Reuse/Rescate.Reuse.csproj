@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0-windows</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AllowUnsafeBlocks>true</AllowUnsafeBlocks><TreatWarningsAsErrors>true</TreatWarningsAsErrors><AssemblyName>RescateUSB.Reutilizar</AssemblyName></PropertyGroup>
+ <ItemGroup><ProjectReference Include="../Rescate.Core/Rescate.Core.csproj"/><Compile Include="../Rescate.Acquire/PhysicalSource.cs" Link="PhysicalSource.cs"/></ItemGroup>
+</Project>

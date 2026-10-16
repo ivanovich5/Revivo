@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0-windows</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors><AssemblyName>RescateUSB.Cli</AssemblyName></PropertyGroup>
+ <ItemGroup><ProjectReference Include="../Rescate.Core/Rescate.Core.csproj"/></ItemGroup>
+</Project>

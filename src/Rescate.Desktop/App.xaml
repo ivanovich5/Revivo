@@ -1,0 +1,44 @@
+<Application x:Class="Rescate.Desktop.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+ <Application.Resources>
+  <FontFamily x:Key="TitleFont">pack://application:,,,/Revivo;component/Brand/#Silkscreen</FontFamily>
+  <SolidColorBrush x:Key="Ink" Color="#EEEDFE"/>
+  <SolidColorBrush x:Key="Muted" Color="#AFA9EC"/>
+  <SolidColorBrush x:Key="Accent" Color="#534AB7"/>
+  <Style TargetType="Button">
+   <Setter Property="Padding" Value="16,10"/><Setter Property="Margin" Value="0,0,8,0"/>
+   <Setter Property="Background" Value="#26215C"/><Setter Property="Foreground" Value="{StaticResource Ink}"/>
+   <Setter Property="BorderBrush" Value="#3C3489"/><Setter Property="BorderThickness" Value="1"/>
+   <Setter Property="Cursor" Value="Hand"/><Setter Property="FontSize" Value="13"/>
+   <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="Button">
+    <Border x:Name="Chrome" CornerRadius="7" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/></Border>
+    <ControlTemplate.Triggers><Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Chrome" Property="Opacity" Value="0.8"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter TargetName="Chrome" Property="Opacity" Value="0.4"/></Trigger><Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Chrome" Property="BorderBrush" Value="#534AB7"/><Setter TargetName="Chrome" Property="BorderThickness" Value="2"/></Trigger></ControlTemplate.Triggers>
+   </ControlTemplate></Setter.Value></Setter>
+  </Style>
+  <Style TargetType="TextBox"><Setter Property="Background" Value="#1E1B45"/><Setter Property="Padding" Value="10,9"/><Setter Property="BorderBrush" Value="#3C3489"/><Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="FontSize" Value="13"/></Style>
+  <Style TargetType="ComboBox"><Setter Property="Foreground" Value="#26215C"/><Setter Property="Padding" Value="10,8"/><Setter Property="FontSize" Value="13"/></Style>
+ <Style TargetType="DataGrid"><Setter Property="Background" Value="#1E1B45"/><Setter Property="Foreground" Value="#EEEDFE"/><Setter Property="RowBackground" Value="#1E1B45"/><Setter Property="AlternatingRowBackground" Value="#26215C"/><Setter Property="BorderBrush" Value="#3C3489"/></Style>
+<Style TargetType="DataGridColumnHeader"><Setter Property="Background" Value="#26215C"/><Setter Property="Foreground" Value="#EEEDFE"/><Setter Property="Padding" Value="8"/></Style>
+<Style TargetType="TabControl"><Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Background" Value="#1E1B45"/><Setter Property="BorderBrush" Value="#3C3489"/></Style>
+<Style TargetType="TabItem"><Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Background" Value="#26215C"/><Setter Property="Template"><Setter.Value><ControlTemplate TargetType="TabItem"><Border Background="{TemplateBinding Background}" Padding="12,9" BorderBrush="#3C3489" BorderThickness="1"><ContentPresenter ContentSource="Header"/></Border><ControlTemplate.Triggers><Trigger Property="IsSelected" Value="True"><Setter Property="Background" Value="#534AB7"/></Trigger><Trigger Property="IsEnabled" Value="False"><Setter Property="Opacity" Value="0.5"/></Trigger></ControlTemplate.Triggers></ControlTemplate></Setter.Value></Setter></Style>
+<Style TargetType="Expander"><Setter Property="Foreground" Value="{StaticResource Ink}"/></Style>
+<Style TargetType="ListBox"><Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Background" Value="#1E1B45"/><Setter Property="BorderBrush" Value="#3C3489"/>
+ <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ListBox">
+  <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+   <ScrollViewer Focusable="False" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"><ItemsPresenter/></ScrollViewer>
+  </Border>
+ </ControlTemplate></Setter.Value></Setter>
+</Style>
+<Style TargetType="ListBoxItem">
+ <Setter Property="Foreground" Value="{StaticResource Ink}"/><Setter Property="Background" Value="Transparent"/><Setter Property="HorizontalContentAlignment" Value="Stretch"/><Setter Property="Padding" Value="6"/><Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+ <Setter Property="Template"><Setter.Value><ControlTemplate TargetType="ListBoxItem">
+  <Border x:Name="ItemBorder" Background="{TemplateBinding Background}" BorderBrush="Transparent" BorderThickness="2" CornerRadius="8" Padding="{TemplateBinding Padding}"><ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/></Border>
+  <ControlTemplate.Triggers>
+   <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="ItemBorder" Property="Background" Value="#26215C"/></Trigger>
+   <Trigger Property="IsSelected" Value="True"><Setter TargetName="ItemBorder" Property="Background" Value="#3C3489"/><Setter TargetName="ItemBorder" Property="BorderBrush" Value="#AFA9EC"/></Trigger>
+   <Trigger Property="IsKeyboardFocusWithin" Value="True"><Setter TargetName="ItemBorder" Property="BorderBrush" Value="#F0997B"/></Trigger>
+  </ControlTemplate.Triggers>
+ </ControlTemplate></Setter.Value></Setter>
+</Style>
+<Style TargetType="ProgressBar"><Setter Property="Foreground" Value="#F0997B"/><Setter Property="Background" Value="#26215C"/></Style>
+</Application.Resources>
+</Application>

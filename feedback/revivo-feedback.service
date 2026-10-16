@@ -1,0 +1,16 @@
+[Unit]
+Description=Revivo private feedback
+After=network.target
+[Service]
+DynamicUser=yes
+StateDirectory=revivo-feedback
+StateDirectoryMode=0700
+ExecStart=/usr/bin/python3 /opt/revivo-feedback/feedback.py
+Restart=on-failure
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+[Install]
+WantedBy=multi-user.target
