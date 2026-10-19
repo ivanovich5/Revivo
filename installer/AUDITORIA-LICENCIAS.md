@@ -2,6 +2,9 @@
 
 Estado: preparación local; no es una certificación jurídica ni autorización pública.
 
+Actualización: véase [validación del 19 de octubre](VALIDACION-0917.md), con
+pruebas del paquete 0.9.17, dependencias identificadas y pendientes concretos.
+
 | Componente | Evidencia y acción | Pendiente |
 | --- | --- | --- |
 | Código propio Revivo | AGPL-3.0-only autorizada por el propietario | Revisar compatibilidad y completar fuentes reproducibles |
