@@ -1,40 +1,89 @@
-# REVIVO
+<p align="center">
+  <img src="docs/images/revivo-banner.svg" width="100%" alt="REVIVO — Tus archivos, primero. Recuperación USB para Windows 11. Código abierto, beta 0.9.17.">
+</p>
 
-**Tus archivos, primero.** Herramienta beta para Windows 11 que busca archivos de memorias USB dañadas o RAW trabajando sobre una copia protegida.
+<p align="center">
+  <a href="https://revivo.digital"><strong>Visitar la web</strong></a> ·
+  <a href="BUILD.md">Compilar el programa</a> ·
+  <a href="https://revivo.digital/#feedback">Enviar feedback</a> ·
+  <a href="https://github.com/ivanovich5/Revivo/issues">Reportar un problema</a>
+</p>
 
-Sitio web: https://revivo.digital · Versión del código: **0.9.17 beta**.
+<p align="center">
+  <strong>Una herramienta para recuperar archivos de memorias USB dañadas o RAW.</strong><br>
+  Crea una copia protegida, revisa lo encontrado y elige qué guardar en tu computadora.
+</p>
 
-## Qué incluye
+> [!NOTE]
+> **Estamos en beta.** Este repositorio contiene el código de REVIVO **0.9.17**, la web y el servicio de feedback. El instalador todavía no está publicado en GitHub Releases: falta completar la revisión de distribución de sus dependencias.
 
-- Aplicación de escritorio WPF y auxiliares de adquisición y reutilización.
-- Copia sector por sector, escaneo con motores externos y búsqueda por firmas.
-- Revisión de archivos, vistas previas locales y guardado por tipo.
-- Diagnóstico de lectura; no certifica escritura, retención ni fiabilidad futura.
-- Página web estática y receptor privado de feedback para un servidor propio.
+## Una segunda oportunidad para tus archivos
 
-No se garantiza recuperar todos los archivos ni conservar sus nombres y carpetas originales. Las comprobaciones estructurales no demuestran integridad completa. La reutilización con borrado es opcional y exige verificaciones y confirmación explícita.
+REVIVO combina la recuperación de datos con un flujo pensado para acompañarte: elegir la memoria, buscar en una copia y revisar los resultados antes de guardar tu selección.
 
-## Estructura
+| 🛡️ Trabajar sobre una copia | 🔎 Revisar antes de guardar |
+| :--- | :--- |
+| Lectura de la USB y creación de una imagen sector por sector. La recuperación se realiza sobre esa copia. | Vistas previas locales de formatos compatibles, disponibles con doble clic sobre el nombre. |
+| **📁 Elegir y organizar** | **🩺 Entender el estado de la memoria** |
+| Selección individual o por lote, filtros por tipo y estado, y guardado en carpetas por tipo. | Diagnóstico de lectura con información sobre errores y demoras, sin afirmar que la USB sea fiable. |
 
-| Carpeta | Contenido |
-|---|---|
-| `src/` | Aplicación .NET, motores de coordinación y auxiliares |
-| `scripts/` | Validación, vistas previas y preparación de motores |
-| `tests/` | Pruebas y generadores de imágenes sintéticas |
-| `installer/` | Configuración de Inno Setup y auditoría de distribución |
-| `web/` | Página pública HTML/CSS/JavaScript |
-| `feedback/` | Receptor de mensajes y servicio systemd de ejemplo |
+## De la USB a tu computadora
 
-## Compilar y probar
+![Proceso de REVIVO: 1. Crear una copia protegida; 2. Buscar y revisar archivos; 3. Guardar la selección.](docs/images/recovery-flow.svg)
 
-Consulta [BUILD.md](BUILD.md). Los motores y el runtime Python se preparan aparte. Publicar el proyecto WPF no crea por sí solo un instalador completo.
+1. **Elige la memoria y el destino.** REVIVO prepara una copia para proteger el original.
+2. **Revisa lo encontrado.** Explora los resultados, abre las vistas disponibles y marca tus archivos.
+3. **Guarda lo que importa.** Elige una carpeta en tu computadora y sigue el progreso del guardado.
 
-Este repositorio no incluye instaladores, imágenes de USB, archivos recuperados, registros de usuarios, credenciales ni bases de datos de feedback. No hay todavía una GitHub Release pública del instalador: está pendiente completar la revisión de distribución de sus dependencias.
+Las imágenes de esta página son ilustraciones del flujo, no capturas ni resultados de una recuperación real.
 
-## Comentarios y contribuciones
+## Antes de empezar
 
-Puedes [enviar feedback](https://revivo.digital/#feedback) o abrir un Issue. No adjuntes archivos recuperados, imágenes de memorias, claves, números de serie ni datos personales. Lee [CONTRIBUTING.md](CONTRIBUTING.md) antes de contribuir.
+> [!IMPORTANT]
+> Si necesitas recuperar información, **no formatees ni guardes archivos nuevos en la memoria**. El proceso puede tardar desde minutos hasta varias horas y requiere espacio para la imagen, los archivos extraídos y las vistas previas.
 
-## Licencia
+- **Encontrado no significa íntegro.** Una comprobación estructural no garantiza contenido completo.
+- **Nombres y carpetas pueden perderse.** Depende de la información que sobreviva en el sistema de archivos.
+- **El diagnóstico tiene límites.** Una lectura correcta no certifica escritura, retención ni fiabilidad futura.
+- **Reutilizar es opcional.** El borrado está separado del rescate y requiere verificaciones y confirmación explícita.
 
-El código propio de REVIVO se publica bajo **AGPL-3.0-only**; véase [LICENSE.txt](LICENSE.txt). Las bibliotecas, motores y fuentes mantienen sus licencias: [THIRD_PARTY.md](THIRD_PARTY.md). Silkscreen se incluye bajo OFL 1.1. El repositorio contiene código propio y recursos de marca del proyecto; no incorpora los paquetes binarios de terceros ni afirma ser una entrega completa de sus fuentes correspondientes.
+## Para quienes quieren construir con REVIVO
+
+**Windows 11 · .NET 8 / WPF · Python · HTML / CSS / JavaScript**
+
+La aplicación coordina motores externos, validación y vistas previas. La web funciona como sitio estático; su formulario utiliza un receptor privado de feedback.
+
+```text
+Revivo/
+├── src/          Aplicación de escritorio y auxiliares
+├── scripts/      Validación, vistas y preparación de motores
+├── tests/        Pruebas y generadores de imágenes sintéticas
+├── installer/    Configuración de Inno Setup
+├── web/          Página web pública
+├── feedback/     Receptor privado de comentarios
+└── docs/images/  Recursos visuales de este README
+```
+
+**[Guía de compilación →](BUILD.md)** · **[Dependencias y licencias →](THIRD_PARTY.md)**
+
+Publicar el proyecto WPF no genera por sí solo un instalador completo. Los motores y el runtime Python se preparan aparte. El repositorio no incluye instaladores, imágenes de USB, archivos recuperados, credenciales ni bases de datos de usuarios.
+
+## Ayúdanos a mejorar
+
+| Quiero… | Dónde empezar |
+| :--- | :--- |
+| Contar cómo me fue o sugerir algo | [Formulario de feedback](https://revivo.digital/#feedback) |
+| Reportar un problema reproducible | [Issues de GitHub](https://github.com/ivanovich5/Revivo/issues) |
+| Contribuir con código o documentación | [Guía para contribuir](CONTRIBUTING.md) |
+
+**Cuida tus datos:** no adjuntes documentos recuperados, imágenes de memorias, claves, números de serie ni información personal. Para reproducir errores, utiliza datos sintéticos.
+
+## Código abierto, con responsabilidades claras
+
+El código propio de REVIVO se ofrece bajo **[AGPL-3.0-only](LICENSE.txt)**. Los motores, bibliotecas y fuentes conservan sus licencias: consulta [THIRD_PARTY.md](THIRD_PARTY.md). Silkscreen se incluye bajo OFL 1.1.
+
+Este repositorio no incorpora los paquetes binarios de terceros ni afirma ser una entrega completa de sus fuentes correspondientes.
+
+---
+
+<p align="center"><strong>REVIVO</strong><br>Tus archivos, primero.<br><a href="https://revivo.digital">revivo.digital</a></p>
