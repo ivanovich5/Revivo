@@ -74,6 +74,20 @@ await Check("Image cleanup rejects incomplete or mismatched acquisition", () =>
     Throws(()=>ImageCleanup.Inspect(dir));Assert(File.Exists(image),"Invalid image deleted");
     return Task.CompletedTask;
 });
+await Check("Export accepts small files on FAT32 but rejects oversized files and original USB", () =>
+{
+    var fat=new Safety.StorageVolume(5,7,true,"FAT32",50L*1024*1024*1024);
+    ExportDestination.ValidateFiles(fat,[1024,2048,uint.MaxValue]);
+    Throws(()=>ExportDestination.ValidateFiles(fat,[(long)uint.MaxValue+1]));
+    Throws(()=>ExportDestination.ValidateFiles(fat with {FreeBytes=1},[1024]));
+    var usb=new UsbDisk(5,"Other","OTHER123","id-other",16000000000,"","",false,false);
+    ExportDestination.ValidateOriginal(usb,16000000000,"ORIGINAL123","id-original");
+    Throws(()=>ExportDestination.ValidateOriginal(usb,16000000000,"OTHER123","id-original"));
+    Throws(()=>ExportDestination.ValidateOriginal(usb,16000000000,"ORIGINAL123","id-other"));
+    Throws(()=>ExportDestination.ValidateOriginal(usb,16000000000,"",""));
+    Throws(()=>ExportDestination.ValidateOriginal(usb,0,"",""));
+    return Task.CompletedTask;
+});
 await Check("Parse filenames containing pipes and deleted entries", () =>
 {
     var entry = RecoveryEngine.ParseBodyLine("0|/a|b.txt (deleted)|5|r/rrwxrwxrwx|0|0|14|0|0|0|0", new(0,512,"FAT32"),1);

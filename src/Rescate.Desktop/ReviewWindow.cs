@@ -255,9 +255,10 @@ public sealed class ReviewWindow : UserControl
         var ext=entry.IdentifiedExtension;
         return ext is ".pdf" or ".docx" or ".xlsx" or ".pptx" or ".jpg" or ".png" or ".gif" or ".wav" or ".zip" or ".epub" or ".txt" ? ext : Path.GetExtension(entry.Name);
     }
-    private static async Task<string> ExportFiles(List<ReviewEntry> chosen,string destination,string folderName="Archivos recuperados",Action<double,string>? progress=null)
+    private async Task<string> ExportFiles(List<ReviewEntry> chosen,string destination,string folderName="Archivos recuperados",Action<double,string>? progress=null)
     {
-            Safety.RequireInternalDisk(destination);ValidateFolderName(folderName);
+            ValidateFolderName(folderName);
+            await ExportDestination.Check(destination,folder,chosen.Select(e=>new FileInfo(e.Path).Length).ToArray());
             var clean=folderName.Trim();var output=Path.Combine(destination,clean);int suffix=2;
             while(Directory.Exists(output)||File.Exists(output))output=Path.Combine(destination,$"{clean} ({suffix++})");
             Safety.LocalPath(output);Directory.CreateDirectory(output);
@@ -306,7 +307,7 @@ public sealed class ReviewWindow : UserControl
         await System.Windows.Threading.Dispatcher.Yield();
         var chosen=entries.Where(x=>x.IsChecked && x.CanSave).DistinctBy(x=>x.Sha256).ToList();
         if(chosen.Count==0){MessageBox.Show(Window.GetWindow(this),"Marca las casillas de los archivos que quieres guardar, o pulsa Seleccionar todos (filtro).");return;}
-        var dialog=new Microsoft.Win32.OpenFolderDialog{Title=$"Guardar {chosen.Count} archivo(s) en la computadora"};
+        var dialog=new Microsoft.Win32.OpenFolderDialog{Title=$"Guardar {chosen.Count} archivo(s): disco interno, otra USB o SSD externo"};
         if(dialog.ShowDialog(Window.GetWindow(this))!=true)return;
         try
         {
