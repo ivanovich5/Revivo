@@ -5,13 +5,13 @@
 #define BuildAppId "{{7B2FF733-93C2-4AC6-A177-110B40398C50}"
 #endif
 #ifndef BuildName
-#define BuildName "Revivo"
+#define BuildName "REVIVO-USB"
 #endif
 #ifndef OutputName
-#define OutputName "Revivo-0.9.17-beta-setup"
+#define OutputName "REVIVO-USB-0.9.18-beta-setup"
 #endif
 #ifndef BuildVersion
-#define BuildVersion "0.9.17"
+#define BuildVersion "0.9.18"
 #endif
 #ifndef BundleSources
 #define BundleSources 1
@@ -59,4 +59,4 @@ Source: "{#SourceRoot}\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
 Name: "{group}\{#BuildName}"; Filename: "{app}\app\Revivo.exe"; WorkingDir: "{app}"
 Name: "{userdesktop}\{#BuildName}"; Filename: "{app}\app\Revivo.exe"; WorkingDir: "{app}"
 [Run]
-Filename: "{app}\app\Revivo.exe"; Description: "Abrir Revivo"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\app\Revivo.exe"; Description: "Abrir REVIVO-USB"; Flags: nowait postinstall skipifsilent

@@ -267,6 +267,11 @@ public partial class MainWindow : Window
         }
         catch(Exception ex) { Error(ex); }
     }
+    private void Support_Click(object sender,RoutedEventArgs e)
+    {
+        try{System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://revivo.digital/#apoyar"){UseShellExecute=true});}
+        catch(Exception ex){Error(new IOException("Abre https://revivo.digital/#apoyar en tu navegador. "+ex.Message));}
+    }
     private void Feedback_Click(object sender,RoutedEventArgs e)
     {
         try{System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo("https://revivo.digital/#feedback"){UseShellExecute=true});}
