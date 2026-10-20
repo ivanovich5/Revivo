@@ -320,7 +320,7 @@ public sealed class ReviewWindow : UserControl
                 finally{progressWindow.Finished=true;progressWindow.Close();}
             };
             progressWindow.ShowDialog();if(failure is not null)throw failure;
-            CompletionWindow.Show(owner,"Archivos guardados",$"Se guardaron {chosen.Count:N0} archivos por tipo en:\n{output}\n\nLas copias se verificaron contra los archivos recuperados. Esto no repara daños que ya existían.","Abrir carpeta",output);
+            CompletionWindow.Show(owner,"Archivos guardados",$"Se guardaron {chosen.Count:N0} archivos por tipo en:\n{output}\n\nLas copias se verificaron contra los archivos recuperados. Esto no repara daños que ya existían.","Abrir carpeta",output,folder);
         }catch(Exception ex){MessageBox.Show(Window.GetWindow(this),"No se completó la exportación: "+ex.Message);}
     }
 }

@@ -4,7 +4,7 @@
   <Grid.Style><Style TargetType="Grid"><Setter Property="MinWidth" Value="780"/><Style.Triggers><DataTrigger Binding="{Binding SelectedIndex, ElementName=WorkspaceTabs}" Value="1"><Setter Property="MinWidth" Value="1060"/></DataTrigger></Style.Triggers></Style></Grid.Style>
   <Grid.ColumnDefinitions><ColumnDefinition Width="195"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
   <Border Background="#1E1B45" Padding="16,18"><DockPanel>
-   <TextBlock DockPanel.Dock="Bottom" Text="REVIVO-USB 0.9.19 · Beta" Foreground="#AFA9EC" FontSize="12" Margin="0,12,0,0"/>
+   <TextBlock DockPanel.Dock="Bottom" Text="REVIVO-USB 1.0" Foreground="#AFA9EC" FontSize="12" Margin="0,12,0,0"/>
    <StackPanel>
     <Image Source="Brand/logo.png" Width="52" Height="52" HorizontalAlignment="Center" Margin="0,0,0,10"/>
     <TextBlock Text="REVIVO-USB" TextAlignment="Center" FontFamily="{StaticResource TitleFont}" FontSize="18" Foreground="White"/>

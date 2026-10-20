@@ -46,6 +46,34 @@ await Check("External destination: USB and SSD allowed, same physical disk rejec
     Throws(()=>Safety.ValidateStorage(usb with {BusType=15},2));
     return Task.CompletedTask;
 });
+await Check("Image cleanup deletes only identified image, preserving files and reports", () =>
+{
+    var dir=Path.Combine(run,"cleanup");Directory.CreateDirectory(dir);
+    var image=Path.Combine(dir,"usb.img");File.WriteAllBytes(image,new byte[512]);
+    File.WriteAllText(Path.Combine(dir,"recovered.txt"),"keep");
+    var map=new AcquisitionMap {SourceIdentity="PhysicalDrive99|test",Length=512,Status="Completa",ImageSha256="test",Ranges=[new(0,512,"Leido")]};
+    File.WriteAllText(image+".map.json",JsonSerializer.Serialize(map,RecoveryEngine.Json));
+    File.WriteAllText(Path.Combine(dir,"source.json"),JsonSerializer.Serialize(new{Identity=map.SourceIdentity}));
+    var plan=ImageCleanup.Find(dir) ?? throw new Exception("Missing cleanup plan");
+    using(var busy=File.Open(image,FileMode.Open,FileAccess.Read,FileShare.Read))Throws(()=>ImageCleanup.DeleteConfirmed(plan));
+    Assert(File.Exists(image),"Busy image deleted");
+    File.SetLastWriteTimeUtc(image,DateTime.UtcNow.AddMinutes(-5));
+    Throws(()=>ImageCleanup.DeleteConfirmed(plan));
+    plan=ImageCleanup.Inspect(dir);ImageCleanup.DeleteConfirmed(plan);
+    Assert(!File.Exists(image) && File.ReadAllText(Path.Combine(dir,"recovered.txt"))=="keep" && File.Exists(image+".map.json") && File.Exists(Path.Combine(dir,"source.json")),"Cleanup touched other files");
+    Throws(()=>ImageCleanup.DeleteConfirmed(plan));
+    return Task.CompletedTask;
+});
+await Check("Image cleanup rejects incomplete or mismatched acquisition", () =>
+{
+    var dir=Path.Combine(run,"cleanup-reject");Directory.CreateDirectory(dir);
+    var image=Path.Combine(dir,"usb.img");File.WriteAllBytes(image,new byte[512]);
+    var map=new AcquisitionMap{SourceIdentity="PhysicalDrive99|test",Length=512};
+    File.WriteAllText(image+".map.json",JsonSerializer.Serialize(map,RecoveryEngine.Json));
+    File.WriteAllText(Path.Combine(dir,"source.json"),"{\"Identity\":\"other\"}");
+    Throws(()=>ImageCleanup.Inspect(dir));Assert(File.Exists(image),"Invalid image deleted");
+    return Task.CompletedTask;
+});
 await Check("Parse filenames containing pipes and deleted entries", () =>
 {
     var entry = RecoveryEngine.ParseBodyLine("0|/a|b.txt (deleted)|5|r/rrwxrwxrwx|0|0|14|0|0|0|0", new(0,512,"FAT32"),1);
