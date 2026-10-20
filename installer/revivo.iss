@@ -8,10 +8,10 @@
 #define BuildName "REVIVO-USB"
 #endif
 #ifndef OutputName
-#define OutputName "REVIVO-USB-1.0.1-setup"
+#define OutputName "REVIVO-USB-1.0.2-setup"
 #endif
 #ifndef BuildVersion
-#define BuildVersion "1.0.1"
+#define BuildVersion "1.0.2"
 #endif
 #ifndef BundleSources
 #define BundleSources 1

@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWPF>true</UseWPF><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>Revivo</AssemblyName><Product>REVIVO-USB</Product><ApplicationIcon>Brand/revivo.ico</ApplicationIcon><Version>1.0.1</Version><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
+  <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net8.0-windows</TargetFramework><UseWPF>true</UseWPF><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AssemblyName>Revivo</AssemblyName><Product>REVIVO-USB</Product><ApplicationIcon>Brand/revivo.ico</ApplicationIcon><Version>1.0.2</Version><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup>
   <ItemGroup><ProjectReference Include="../Rescate.Core/Rescate.Core.csproj" /></ItemGroup>
 <ItemGroup><Resource Include="Brand/logo.png"/><Resource Include="Brand/Silkscreen-Regular.ttf"/><Resource Include="Brand/revivo.ico"/></ItemGroup></Project>
 

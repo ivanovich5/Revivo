@@ -255,10 +255,12 @@ public sealed class ReviewWindow : UserControl
         var ext=entry.IdentifiedExtension;
         return ext is ".pdf" or ".docx" or ".xlsx" or ".pptx" or ".jpg" or ".png" or ".gif" or ".wav" or ".zip" or ".epub" or ".txt" ? ext : Path.GetExtension(entry.Name);
     }
-    private async Task<string> ExportFiles(List<ReviewEntry> chosen,string destination,string folderName="Archivos recuperados",Action<double,string>? progress=null)
+    private async Task<string> ExportFiles(List<ReviewEntry> chosen,string destination,string folderName="Archivos recuperados",Action<double,string>? progress=null,CancellationToken token=default)
     {
+            token.ThrowIfCancellationRequested();
             ValidateFolderName(folderName);
             await ExportDestination.Check(destination,folder,chosen.Select(e=>new FileInfo(e.Path).Length).ToArray());
+            token.ThrowIfCancellationRequested();
             var clean=folderName.Trim();var output=Path.Combine(destination,clean);int suffix=2;
             while(Directory.Exists(output)||File.Exists(output))output=Path.Combine(destination,$"{clean} ({suffix++})");
             Safety.LocalPath(output);Directory.CreateDirectory(output);
@@ -267,6 +269,7 @@ public sealed class ReviewWindow : UserControl
             var report=new List<object>();
             try { foreach(var entry in chosen)
             {
+                token.ThrowIfCancellationRequested();
                 Safety.RequireLocalDisk(entry.Path);
                 if(!entry.CanSave)throw new IOException("Se excluyen accesos directos y programas de esta exportación.");
                 var dir=Path.Combine(output,Safety.SafeName(entry.Group));Directory.CreateDirectory(dir);
@@ -274,16 +277,36 @@ public sealed class ReviewWindow : UserControl
                 await using(var input=File.OpenRead(entry.Path))
                 await using(var file=new FileStream(path+".partial",FileMode.CreateNew,FileAccess.Write,FileShare.None)){
                     var buffer=new byte[1024*1024];int n;long last=Environment.TickCount64;
-                    while((n=await input.ReadAsync(buffer))>0)
+                    while((n=await input.ReadAsync(buffer,token))>0)
                     {
-                        await file.WriteAsync(buffer.AsMemory(0,n));done+=n;
-                        if(Environment.TickCount64-last>100){progress?.Invoke(total>0?Math.Min(99,100.0*done/total):0,$"Copiando {completed+1} de {chosen.Count} · {entry.Name}");last=Environment.TickCount64;}
+                        await file.WriteAsync(buffer.AsMemory(0,n),token);done+=n;
+                        if(Environment.TickCount64-last>100){progress?.Invoke(total>0?Math.Min(99,100.0*done/(2.0*total)):0,$"Copiando {completed+1} de {chosen.Count} · {entry.Name}");last=Environment.TickCount64;await System.Windows.Threading.Dispatcher.Yield();}
                     }
                 }
-                progress?.Invoke(total>0?Math.Min(99,100.0*done/total):0,$"Verificando {completed+1} de {chosen.Count} · {entry.Name}");
-                if(!string.Equals(await RecoveryEngine.HashFile(path+".partial",default),entry.Sha256,StringComparison.OrdinalIgnoreCase))throw new IOException("La copia de un archivo no coincide. Se conserva con extensión .partial.");
-                File.Move(path+".partial",path);completed++;progress?.Invoke(total>0?Math.Min(99,100.0*done/total):0,$"{completed} de {chosen.Count} archivos guardados y verificados");report.Add(new{entry.Name,entry.Status,entry.Sha256,Output=path});
+                progress?.Invoke(total>0?Math.Min(99,100.0*done/(2.0*total)):0,$"Verificando {completed+1} de {chosen.Count} · {entry.Name}");
+                string actualHash;
+                using(var hash=System.Security.Cryptography.IncrementalHash.CreateHash(System.Security.Cryptography.HashAlgorithmName.SHA256))
+                {
+                    await using var verify=File.OpenRead(path+".partial");
+                    var buffer=new byte[1024*1024];int n;long last=Environment.TickCount64;
+                    while((n=await verify.ReadAsync(buffer,token))>0)
+                    {
+                        hash.AppendData(buffer,0,n);done+=n;
+                        if(Environment.TickCount64-last>100){progress?.Invoke(total>0?Math.Min(99,100.0*done/(2.0*total)):0,$"Verificando {completed+1} de {chosen.Count} · {entry.Name}");last=Environment.TickCount64;await System.Windows.Threading.Dispatcher.Yield();}
+                    }
+                    actualHash=Convert.ToHexString(hash.GetHashAndReset());
+                }
+                token.ThrowIfCancellationRequested();
+                if(!string.Equals(actualHash,entry.Sha256,StringComparison.OrdinalIgnoreCase))throw new IOException("La copia de un archivo no coincide. Se conserva con extensión .partial.");
+                File.Move(path+".partial",path);completed++;progress?.Invoke(total>0?Math.Min(99,100.0*done/(2.0*total)):0,$"{completed} de {chosen.Count} archivos guardados y verificados");report.Add(new{entry.Name,entry.Status,entry.Sha256,Output=path});
+                await System.Windows.Threading.Dispatcher.Yield();
+                token.ThrowIfCancellationRequested();
             }
+            }
+            catch(OperationCanceledException)
+            {
+                await File.WriteAllTextAsync(Path.Combine(output,"informe.json"),JsonSerializer.Serialize(report,Json));
+                throw new OperationCanceledException($"Guardado cancelado. Se conservaron {completed} de {chosen.Count} archivos completos y verificados.\nCarpeta: {output}\nSi hay un archivo .partial, está incompleto y no cuenta como guardado. La recuperación original se conserva.",token);
             }
             catch(Exception ex){throw new IOException($"Se guardaron y verificaron {completed} de {chosen.Count} archivos. El proceso se detuvo; los restantes no se completaron.\nCarpeta: {output}\nNo borres los archivos originales. Revisa el espacio disponible y vuelve a intentarlo.\nDetalle: {ex.Message}",ex);}
             await File.WriteAllTextAsync(Path.Combine(output,"informe.json"),JsonSerializer.Serialize(report,Json));
@@ -300,7 +323,26 @@ public sealed class ReviewWindow : UserControl
         foreach(var bad in new[]{"../escape","CON","a/b","", "final."}){bool rejected=false;try{ValidateFolderName(bad);}catch(IOException){rejected=true;}if(!rejected)throw new IOException("Nombre inseguro aceptado");}
         using var report=JsonDocument.Parse(await File.ReadAllTextAsync(Path.Combine(output,"informe.json")));
         if(report.RootElement.GetArrayLength()!=2)throw new IOException("No se exportó el lote completo");
-        await File.WriteAllTextAsync(Path.Combine(destination,"prueba-lote.json"),JsonSerializer.Serialize(new{Passed=true,Count=2,Output=output}));
+        foreach(var duringVerification in new[]{false,true})
+        {
+            using var stop=new CancellationTokenSource();bool cancelled=false;
+            var label=duringVerification?"Cancelar verificando":"Cancelar después del primero";
+            try
+            {
+                await ExportFiles(chosen,destination,label,(_,message)=>
+                {
+                    if(duringVerification?message.StartsWith("Verificando"):message.StartsWith("1 de ") && message.Contains("guardados y verificados"))stop.Cancel();
+                },stop.Token);
+            }
+            catch(OperationCanceledException){cancelled=true;}
+            if(!cancelled)throw new IOException("La exportación ignoró Cancelar");
+            var stopped=Path.Combine(destination,label);
+            using var partialReport=JsonDocument.Parse(await File.ReadAllTextAsync(Path.Combine(stopped,"informe.json")));
+            if(partialReport.RootElement.GetArrayLength()!=(duringVerification?0:1))throw new IOException("Informe de cancelación incorrecto");
+            if(duringVerification && !Directory.EnumerateFiles(stopped,"*.partial",SearchOption.AllDirectories).Any())throw new IOException("No se conservó el archivo incompleto");
+            foreach(var entry in chosen)if(!File.Exists(entry.Path))throw new IOException("Cancelar afectó el origen");
+        }
+        await File.WriteAllTextAsync(Path.Combine(destination,"prueba-lote.json"),JsonSerializer.Serialize(new{Passed=true,Count=2,Output=output,CancelDuringVerification=true,CancelAfterFirstFile=true}));
     }
     private async Task SaveFiles()
     {
@@ -316,13 +358,14 @@ public sealed class ReviewWindow : UserControl
             var progressWindow=new SaveProgressWindow{Owner=owner};
             progressWindow.Loaded+=async(_,_)=>
             {
-                try{await System.Windows.Threading.Dispatcher.Yield();output=await ExportFiles(chosen,dialog.FolderName,folderName,progressWindow.Report);}
+                try{await System.Windows.Threading.Dispatcher.Yield();output=await ExportFiles(chosen,dialog.FolderName,folderName,progressWindow.Report,progressWindow.Token);}
                 catch(Exception ex){failure=ex;}
                 finally{progressWindow.Finished=true;progressWindow.Close();}
             };
             progressWindow.ShowDialog();if(failure is not null)throw failure;
             CompletionWindow.Show(owner,"Archivos guardados",$"Se guardaron {chosen.Count:N0} archivos por tipo en:\n{output}\n\nLas copias se verificaron contra los archivos recuperados. Esto no repara daños que ya existían.","Abrir carpeta",output,folder);
-        }catch(Exception ex){MessageBox.Show(Window.GetWindow(this),"No se completó la exportación: "+ex.Message);}
+        }catch(OperationCanceledException ex){MessageBox.Show(Window.GetWindow(this),ex.Message,"Guardado cancelado");}
+        catch(Exception ex){MessageBox.Show(Window.GetWindow(this),"No se completó la exportación: "+ex.Message);}
     }
 }
 
