@@ -11,6 +11,7 @@ public sealed class PhysicalSource : IReadOnlySource
 {
     private readonly SafeFileHandle handle;
     private readonly AlignedBuffer aligned = new(ImageAcquirer.BlockSize);
+    public int? PhysicalDiskNumber { get; }
     public long Length { get; }
     public int SectorSize { get; }
     public string Identity { get; }
@@ -20,6 +21,7 @@ public sealed class PhysicalSource : IReadOnlySource
     {
         if (disk < 0 || disk > 256 || expectedLength <= 0 || expectedLength > 2L * 1024 * 1024 * 1024 * 1024 || string.IsNullOrWhiteSpace(expectedProduct))
             throw new IOException("Selección de dispositivo no válida.");
+        PhysicalDiskNumber=disk;
         // FileAccess.Read becomes GENERIC_READ. No physical write handle is opened.
         handle = File.OpenHandle(@"\\.\PhysicalDrive" + disk, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, FileOptions.Asynchronous | (unbuffered?(FileOptions)0x20000000:FileOptions.None));
         try

@@ -4,7 +4,7 @@
   <Grid.Style><Style TargetType="Grid"><Setter Property="MinWidth" Value="780"/><Style.Triggers><DataTrigger Binding="{Binding SelectedIndex, ElementName=WorkspaceTabs}" Value="1"><Setter Property="MinWidth" Value="1060"/></DataTrigger></Style.Triggers></Style></Grid.Style>
   <Grid.ColumnDefinitions><ColumnDefinition Width="195"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
   <Border Background="#1E1B45" Padding="16,18"><DockPanel>
-   <TextBlock DockPanel.Dock="Bottom" Text="REVIVO-USB 0.9.18 · Beta" Foreground="#AFA9EC" FontSize="12" Margin="0,12,0,0"/>
+   <TextBlock DockPanel.Dock="Bottom" Text="REVIVO-USB 0.9.19 · Beta" Foreground="#AFA9EC" FontSize="12" Margin="0,12,0,0"/>
    <StackPanel>
     <Image Source="Brand/logo.png" Width="52" Height="52" HorizontalAlignment="Center" Margin="0,0,0,10"/>
     <TextBlock Text="REVIVO-USB" TextAlignment="Center" FontFamily="{StaticResource TitleFont}" FontSize="18" Foreground="White"/>
@@ -22,7 +22,7 @@
       <MenuItem Header="Opciones después del rescate" Click="AfterRecovery_Click"/>
      </ContextMenu></Button.ContextMenu>
     </Button>
-    <TextBlock Text="Lectura protegida de la USB. Los archivos se guardan en tu computadora." TextWrapping="Wrap" Foreground="#AFA9EC" FontSize="12" Margin="0,24,0,0"/>
+    <TextBlock Text="Lectura protegida de la USB. Guarda en el disco interno, otra USB o un disco externo." TextWrapping="Wrap" Foreground="#AFA9EC" FontSize="12" Margin="0,24,0,0"/>
    </StackPanel>
   </DockPanel></Border>
   <Grid Grid.Column="1" Margin="24"><Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
@@ -38,8 +38,8 @@
      </ListBox>
      <Border Background="#1E1B45" CornerRadius="12" Padding="22" Margin="0,24,0,0" BorderBrush="#3C3489" BorderThickness="1"><StackPanel>
       <TextBlock Text="¿Dónde guardamos los archivos?" FontFamily="{StaticResource TitleFont}" FontSize="19" FontWeight="SemiBold"/>
-      <DockPanel Margin="0,12,0,8"><Button Content="Cambiar carpeta" Click="Output_Click" DockPanel.Dock="Right" Margin="10,0,0,0"/><TextBox x:Name="OutputBox" IsReadOnly="True" AutomationProperties.Name="Destino en la computadora"/></DockPanel>
-      <TextBlock Text="Se creará una carpeta nueva para cada recuperación. La USB original nunca es el destino." Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
+      <DockPanel Margin="0,12,0,8"><Button Content="Cambiar carpeta" Click="Output_Click" DockPanel.Dock="Right" Margin="10,0,0,0"/><TextBox x:Name="OutputBox" IsReadOnly="True" AutomationProperties.Name="Destino: disco interno, otra USB o disco externo"/></DockPanel>
+      <TextBlock Text="Se creará una carpeta nueva para cada recuperación. Puedes usar el disco interno, otra USB o un SSD externo en NTFS/exFAT. Mantén el destino conectado. La USB original nunca es el destino." Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
      </StackPanel></Border>
      <Border Background="#26215C" CornerRadius="10" Padding="20" Margin="0,20,0,20"><StackPanel><TextBlock Text="Nos encargamos de preparar la copia segura" FontWeight="SemiBold" FontSize="15"/><TextBlock Text="El rescate puede tardar desde minutos hasta varias horas, especialmente si la memoria está dañada. Primero hacemos una copia, después buscamos archivos y preparamos las vistas. Durante la copia estimaremos el tiempo con la velocidad real; no es el tiempo total. No desconectes la USB mientras trabaja." TextWrapping="Wrap" Margin="0,8,0,0" Foreground="#AFA9EC"/></StackPanel></Border>
      <Button x:Name="UsbScanButton" Content="Buscar archivos en esta memoria" Click="UsbScan_Click" IsEnabled="False" HorizontalAlignment="Right" Background="#534AB7" Foreground="White" Padding="28,15" FontWeight="SemiBold" Margin="0"/>

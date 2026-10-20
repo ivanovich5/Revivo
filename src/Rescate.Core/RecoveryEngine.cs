@@ -217,7 +217,7 @@ public sealed class RecoveryEngine(string engineRoot)
     public static async Task<RecoverySession> Load(string file)
     {
         var path = Safety.LocalPath(file);
-        Safety.RequireInternalDisk(path);
+        Safety.RequireLocalDisk(path);
         if (new FileInfo(path).Length > 128 * 1024 * 1024) throw new IOException("Sesión demasiado grande.");
         var session = JsonSerializer.Deserialize<RecoverySession>(await File.ReadAllTextAsync(path), Json) ?? throw new IOException("Sesión no válida.");
         _ = Safety.ImagePath(session.Image.Path);

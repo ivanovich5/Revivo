@@ -35,6 +35,17 @@ await Check("Accept internal workspace and safe filenames", () =>
     Assert(Safety.SafeName("../../CON:payload\0.txt") == "CON_payload_.txt", "Unsafe filename");
     return Task.CompletedTask;
 });
+await Check("External destination: USB and SSD allowed, same physical disk rejected", () =>
+{
+    var usb=new Safety.StorageVolume(5,7,true,"exFAT",100L*1024*1024*1024);
+    Safety.ValidateStorage(usb,2,16L*1024*1024*1024);
+    Safety.ValidateStorage(usb with {Removable=false,Format="NTFS"},2,16L*1024*1024*1024);
+    Throws(()=>Safety.ValidateStorage(usb,5));
+    Throws(()=>Safety.ValidateStorage(usb with {Format="FAT32"},2));
+    Throws(()=>Safety.ValidateStorage(usb with {FreeBytes=1024},2,16L*1024*1024*1024));
+    Throws(()=>Safety.ValidateStorage(usb with {BusType=15},2));
+    return Task.CompletedTask;
+});
 await Check("Parse filenames containing pipes and deleted entries", () =>
 {
     var entry = RecoveryEngine.ParseBodyLine("0|/a|b.txt (deleted)|5|r/rrwxrwxrwx|0|0|14|0|0|0|0", new(0,512,"FAT32"),1);
@@ -155,6 +166,14 @@ await Check("exFAT long filename and content export", async () =>
     foreach(var file in Directory.GetFiles(output).Where(f=>!Path.GetFileName(f).StartsWith("informe."))) hashes.Add(await RecoveryEngine.HashFile(file,default));
     Assert(hashes.SetEquals(known.Values),"exFAT content mismatch");
     Assert(before == await RecoveryEngine.HashFile(image,default),"exFAT source changed");
+});
+await Check("Acquisition rejects source disk before creating destination or reading", async () =>
+{
+    var target=Path.Combine(run,"same-physical-disk");
+    using var source=new SyntheticSource {PhysicalDiskNumber=(int)Safety.InspectStorage(run).DiskNumber};
+    bool blocked=false;
+    try {await new ImageAcquirer().Create(source,target,false,null,default);}catch(IOException){blocked=true;}
+    Assert(blocked && !Directory.Exists(target) && source.ReadOffsets.Count==0,"Source disk must not be touched");
 });
 await Check("Acquisition: byte-exact image and complete map", async () =>
 {
@@ -371,6 +390,7 @@ internal sealed class FailingDiagnosticProgress : IProgress<AcquisitionProgress>
 {public void Report(AcquisitionProgress value)=>throw new IOException("Test output disk failure");}
 internal sealed class SyntheticSource : IReadOnlySource
 {
+    public int? PhysicalDiskNumber {get;init;}
     public byte[] Data {get;}=Enumerable.Range(0,3*ImageAcquirer.BlockSize).Select(i=>(byte)(i%251)).ToArray();
     public long Length=>Data.Length;
     public int SectorSize=>512;

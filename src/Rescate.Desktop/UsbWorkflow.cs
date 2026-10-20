@@ -33,11 +33,11 @@ public partial class MainWindow
         var destination=OutputBox.Text;
         await RunOperation(async(progress,token)=>
         {
-            Safety.RequireInternalDisk(destination);
+            Safety.RequireLocalDisk(destination,selected.Number,selected.Size);
             AcquisitionSelection.Validate(selected,(await UsbInventory.List(token)).SingleOrDefault(d=>d.Number==selected.Number));
             var required=AcquisitionSelection.RequiredSpace(selected.Size);
             var available=new DriveInfo(Path.GetPathRoot(destination)!).AvailableFreeSpace;
-            if(available<required)throw new IOException($"Espacio disponible: {available/1e9:N1} GB. REVIVO requiere {required/1e9:N1} GB libres para el proceso completo.\n\nLa imagen de esta USB ocupará aproximadamente {selected.Size/1e9:N1} GB. Los otros {(required-selected.Size)/1e9:N1} GB son una reserva preventiva para archivos extraídos, vistas previas y margen de trabajo; no se ocupan de inmediato.\n\nElige otra carpeta en un disco interno con más espacio o libera espacio sin borrar las recuperaciones que quieras conservar. El uso final depende de los resultados y puede variar.");
+            if(available<required)throw new IOException($"Espacio disponible: {available/1e9:N1} GB. REVIVO requiere {required/1e9:N1} GB libres para el proceso completo.\n\nLa imagen de esta USB ocupará aproximadamente {selected.Size/1e9:N1} GB. Los otros {(required-selected.Size)/1e9:N1} GB son una reserva preventiva para archivos extraídos, vistas previas y margen de trabajo; no se ocupan de inmediato.\n\nElige otra carpeta en otro disco interno, memoria USB o SSD externo con más espacio o libera espacio sin borrar las recuperaciones que quieras conservar. El uso final depende de los resultados y puede variar.");
             var caseFolder=Safety.CreateOutput(destination,"USB");
             settings=(settings??new LocalSettings(destination,null)) with {AcquisitionFolder=caseFolder,LatestReviewFolder=null,LatestPreviewCatalog=null,LatestSessionFile=null};
             await SavePreferences();

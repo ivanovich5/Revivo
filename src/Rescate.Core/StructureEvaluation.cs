@@ -20,7 +20,7 @@ public sealed class StructureEvaluation(string engineRoot)
     {
         token.ThrowIfCancellationRequested();
         var original = Safety.ImagePath(imagePath);
-        Safety.RequireInternalDisk(destination);
+        Safety.RequireLocalDisk(destination);
         using var guard = File.Open(original, FileMode.Open, FileAccess.Read, FileShare.Read);
         if (new DriveInfo(Path.GetPathRoot(destination)!).AvailableFreeSpace < guard.Length + 268435456L)
             throw new IOException("Se necesita espacio para otra copia completa de la imagen y su registro.");

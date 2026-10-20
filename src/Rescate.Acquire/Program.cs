@@ -8,9 +8,11 @@ string? folder = null;
 try
 {
     if(args.Length!=1) throw new ArgumentException("Se requiere una solicitud de copia JSON.");
-    var requestPath=Safety.LocalPath(args[0]); Safety.RequireInternalDisk(requestPath);
+    var requestPath=Safety.LocalPath(args[0]); Safety.RequireLocalDisk(requestPath);
     var request=JsonSerializer.Deserialize<Request>(await File.ReadAllTextAsync(requestPath),RecoveryEngine.Json) ?? throw new IOException("Solicitud inválida.");
-    folder=Safety.LocalPath(request.Destination); Safety.RequireInternalDisk(folder);
+    var destination=Safety.LocalPath(request.Destination);
+    Safety.RequireLocalDisk(destination,request.DiskNumber,request.Mode=="Acquire"?request.ExpectedBytes:0);
+    folder=destination;
     if(Process.GetProcesses().Any(p=>p.ProcessName.Contains("recoverit",StringComparison.OrdinalIgnoreCase)))
         throw new IOException("Recoverit está abierto. Ciérralo antes de copiar la memoria.");
     Directory.CreateDirectory(folder);

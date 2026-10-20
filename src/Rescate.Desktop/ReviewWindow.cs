@@ -60,7 +60,7 @@ public sealed class ReviewWindow : UserControl
             try
             {
                 play.IsEnabled=false;audioStatus.Text="Comprobando el archivo…";
-                Safety.RequireInternalDisk(entry.Path);
+                Safety.RequireLocalDisk(entry.Path);
                 if(!string.Equals(await RecoveryEngine.HashFile(entry.Path,CancellationToken.None),entry.Sha256,StringComparison.OrdinalIgnoreCase))throw new IOException("El archivo cambió desde la revisión.");
                 if(selected!=entry || !IsVisible)return;
                 player.Open(new Uri(entry.Path));player.Play();audioStatus.Text="Reproduciendo WAV. Puedes detenerlo en cualquier momento.";
@@ -85,7 +85,7 @@ public sealed class ReviewWindow : UserControl
 
     public ReviewWindow(string catalog)
     {
-        Safety.RequireInternalDisk(catalog); folder=Path.GetDirectoryName(Path.GetFullPath(catalog))!;
+        Safety.RequireLocalDisk(catalog); folder=Path.GetDirectoryName(Path.GetFullPath(catalog))!;
         entries=JsonSerializer.Deserialize<List<ReviewEntry>>(File.ReadAllText(catalog),Json)??[];
         Background=new SolidColorBrush(Color.FromRgb(21,19,46));Foreground=new SolidColorBrush(Color.FromRgb(238,237,254));
         var outer=new DockPanel{Margin=new Thickness(14),Background=Background};Content=outer;
@@ -225,7 +225,7 @@ public sealed class ReviewWindow : UserControl
         if(selected is null)return;
         try
         {
-            var path=selected.Partial?selected.DerivativesFolder:Path.GetDirectoryName(selected.Path)!;Safety.RequireInternalDisk(path);
+            var path=selected.Partial?selected.DerivativesFolder:Path.GetDirectoryName(selected.Path)!;Safety.RequireLocalDisk(path);
             var start=new System.Diagnostics.ProcessStartInfo("explorer.exe"){UseShellExecute=false};start.ArgumentList.Add(path);System.Diagnostics.Process.Start(start);
         }catch(Exception ex){MessageBox.Show(Window.GetWindow(this),ex.Message);}
     }
@@ -266,7 +266,7 @@ public sealed class ReviewWindow : UserControl
             var report=new List<object>();
             try { foreach(var entry in chosen)
             {
-                Safety.RequireInternalDisk(entry.Path);
+                Safety.RequireLocalDisk(entry.Path);
                 if(!entry.CanSave)throw new IOException("Se excluyen accesos directos y programas de esta exportación.");
                 var dir=Path.Combine(output,Safety.SafeName(entry.Group));Directory.CreateDirectory(dir);
                 var path=Path.Combine(dir,entry.Sha256[..12]+"_"+Safety.SafeName(Path.GetFileNameWithoutExtension(entry.Name)+SafeExtension(entry)));

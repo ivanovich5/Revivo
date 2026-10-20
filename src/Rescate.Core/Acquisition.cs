@@ -6,6 +6,7 @@ namespace Rescate.Core;
 // The source contract deliberately has no Write, SetLength, or repair operation.
 public interface IReadOnlySource : IDisposable
 {
+    int? PhysicalDiskNumber => null;
     long Length { get; }
     int SectorSize { get; }
     string Identity { get; }
@@ -69,7 +70,8 @@ public sealed class ImageAcquirer
         IProgress<AcquisitionProgress>? progress, CancellationToken token)
     {
         folder = Safety.LocalPath(folder);
-        Safety.RequireInternalDisk(folder);
+        if(source.PhysicalDiskNumber is int disk) Safety.RequireLocalDisk(folder,disk, resume?0:source.Length);
+        else Safety.RequireInternalDisk(folder);
         if (source.Length <= 0 || source.SectorSize is not (512 or 4096) || source.Length % source.SectorSize != 0)
             throw new IOException("Geometría de origen no válida.");
         Directory.CreateDirectory(folder);

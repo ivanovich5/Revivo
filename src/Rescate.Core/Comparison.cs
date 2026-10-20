@@ -9,7 +9,7 @@ public static class Comparison
     {
         var leftPath = Safety.LocalPath(rescateFolder);
         var rightPath = Safety.LocalPath(otherFolder);
-        Safety.RequireInternalDisk(leftPath); Safety.RequireInternalDisk(rightPath);
+        Safety.RequireLocalDisk(leftPath); Safety.RequireLocalDisk(rightPath);
         if (leftPath.TrimEnd('\\').Equals(rightPath.TrimEnd('\\'), StringComparison.OrdinalIgnoreCase))
             throw new IOException("Selecciona dos carpetas distintas.");
         var left = await Inventory(leftPath, progress, token);

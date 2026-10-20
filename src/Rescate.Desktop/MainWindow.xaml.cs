@@ -72,9 +72,9 @@ public partial class MainWindow : Window
     private void Output_Click(object sender, RoutedEventArgs e)
     {
         if (busy) return;
-        var path = PickFolder("Carpeta en un disco interno para resultados");
+        var path = PickFolder("Destino: disco interno, otra memoria USB o disco externo");
         if (path is null) return;
-        try { Safety.RequireInternalDisk(path); OutputBox.Text = path; }
+        try { Safety.RequireLocalDisk(path,(UsbList.SelectedItem as UsbDisk)?.Number); OutputBox.Text = path; }
         catch (Exception ex) { Error(ex); }
     }
 
@@ -223,7 +223,7 @@ public partial class MainWindow : Window
         try
         {
             var folder=settings?.AcquisitionFolder ?? throw new IOException("No hay una copia asistida configurada. Abre una imagen existente o prepara una solicitud de adquisición.");
-            Safety.RequireInternalDisk(folder);
+            Safety.RequireLocalDisk(folder);
             var progressPath=Path.Combine(folder,"progress.json");
             if(!File.Exists(progressPath)) throw new IOException("La copia todavía no ha publicado su progreso.");
             var p=JsonSerializer.Deserialize<AcquisitionProgress>(File.ReadAllText(progressPath),RecoveryEngine.Json) ?? throw new IOException("Progreso no válido.");
@@ -255,7 +255,7 @@ public partial class MainWindow : Window
         try
         {
             var folder=Safety.LocalPath(settings?.LatestReviewFolder ?? throw new IOException("No hay una revisión configurada."));
-            Safety.RequireInternalDisk(folder);
+            Safety.RequireLocalDisk(folder);
             if(!Directory.Exists(folder) || !File.Exists(Path.Combine(folder,"resumen-final.json")))
                 throw new IOException("No se encontró una revisión terminada en esa carpeta.");
             var byType=Path.Combine(folder,"00_Por_tipo");
@@ -358,7 +358,7 @@ public partial class MainWindow : Window
         if(dialog.ShowDialog(this)!=true)return;
         try
         {
-            var folder=Safety.LocalPath(dialog.FolderName);Safety.RequireInternalDisk(folder);
+            var folder=Safety.LocalPath(dialog.FolderName);Safety.RequireLocalDisk(folder);
             var choices=await Task.Run(()=>SavedRecovery.Find(folder));
             if(choices.Count==0)throw new IOException("No se encontró una recuperación aquí. Elige la carpeta donde guardaste la copia y los resultados, o usa Elegir copia si tienes un archivo .img.");
             SavedRecovery? selected=choices.Count==1?choices[0]:ChooseRecovery(choices);
@@ -394,7 +394,7 @@ public partial class MainWindow : Window
     }
     public async Task ResumeRecovery(string export,IProgress<ScanProgress> progress,CancellationToken token)
     {
-        export=Safety.LocalPath(export);Safety.RequireInternalDisk(export);
+        export=Safety.LocalPath(export);Safety.RequireLocalDisk(export);
         if(!File.Exists(Path.Combine(export,"informe.json")))
             throw new IOException("Selecciona la carpeta recuperados- que contiene informe.json, no la carpeta USB que la contiene.");
         var output=Path.Combine(export,"vistas-"+Guid.NewGuid().ToString("N")[..8]);
@@ -413,7 +413,7 @@ public partial class MainWindow : Window
             var previous=settings?.LatestPreviewCatalog??throw new IOException("Primero termina una recuperación.");
             var priorFolder=Path.GetDirectoryName(Safety.LocalPath(previous))!;
             var export=Path.GetDirectoryName(priorFolder)!;
-            Safety.RequireInternalDisk(export);
+            Safety.RequireLocalDisk(export);
             if(!File.Exists(Path.Combine(export,"informe.json")))throw new IOException("Esta colección antigua no tiene un informe de exportación compatible. Las nuevas recuperaciones se validan automáticamente.");
             var output=Path.Combine(export,"vistas-validadas-"+Guid.NewGuid().ToString("N"));
             await ValidateAndPreview(export,output,progress,token);

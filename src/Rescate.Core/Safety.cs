@@ -27,7 +27,7 @@ public static class Safety
             throw new IOException("Selecciona una imagen sin comprimir .img, .dd o .raw.");
         if (!File.Exists(full) || new FileInfo(full).Length < 512)
             throw new IOException("La imagen no existe o tiene menos de 512 bytes.");
-        RequireInternalDisk(full);
+        RequireLocalDisk(full);
         CheckAcquisition(full);
         return full;
     }
@@ -43,39 +43,51 @@ public static class Safety
         if (hash is not null && map.ImageSha256 != hash) throw new IOException("La imagen no coincide con el hash de adquisición.");
     }
 
-    // Fail closed. No data reads from physical devices: access=0, query-only IOCTLs.
-    // This MVP intentionally accepts images and output on internal disks only.
+    // Query-only volume/device inspection. Unknown and multi-disk volumes fail closed.
+    public sealed record StorageVolume(uint DiskNumber, int BusType, bool Removable, string Format, long FreeBytes);
+    public static StorageVolume InspectStorage(string path)
+    {
+        var full=LocalPath(path);
+        var existing=full;
+        while(!File.Exists(existing) && !Directory.Exists(existing))
+            existing=Path.GetDirectoryName(existing) ?? throw new IOException("No se encontró el volumen.");
+        var volume=new StringBuilder(1024);
+        if(!GetVolumePathName(existing,volume,volume.Capacity))throw new IOException("No se pudo identificar el volumen.");
+        var root=volume.ToString();
+        if(root.Length!=3)throw new IOException("No se admiten volúmenes montados en carpetas.");
+        var drive=new DriveInfo(root);
+        if(!drive.IsReady || drive.DriveType is not (DriveType.Fixed or DriveType.Removable))throw new IOException("Selecciona un disco local disponible.");
+        using var handle=CreateFile(@"\\.\"+root[..2],0,3,IntPtr.Zero,3,0,IntPtr.Zero);
+        var data=new byte[1024];
+        if(handle.IsInvalid || !DeviceIoControl(handle,0x00560000,null,0,data,data.Length,out var count,IntPtr.Zero) || count<32 || BitConverter.ToInt32(data,0)!=1)
+            throw new IOException("Volumen compuesto o no identificable: operación bloqueada.");
+        var number=BitConverter.ToUInt32(data,8);
+        using var disk=CreateFile(@"\\.\PhysicalDrive"+number,0,3,IntPtr.Zero,3,0,IntPtr.Zero);
+        var query=new byte[12];
+        if(disk.IsInvalid || !DeviceIoControl(disk,0x002D1400,query,query.Length,data,data.Length,out count,IntPtr.Zero) || count<32)
+            throw new IOException("No se pudo comprobar la conexión del disco.");
+        return new(number,BitConverter.ToInt32(data,28),data[10]!=0,drive.DriveFormat,drive.AvailableFreeSpace);
+    }
+    public static void ValidateStorage(StorageVolume volume,int? sourceDisk=null,long imageBytes=0)
+    {
+        if(volume.BusType is not (1 or 3 or 7 or 8 or 10 or 11 or 17))throw new IOException("Conexión de disco desconocida o virtual: operación bloqueada.");
+        if(sourceDisk is not null && volume.DiskNumber==sourceDisk.Value)throw new IOException("El destino pertenece a la misma memoria de origen. Elige otro dispositivo físico, no otra partición.");
+        if(!string.Equals(volume.Format,"NTFS",StringComparison.OrdinalIgnoreCase) && !string.Equals(volume.Format,"exFAT",StringComparison.OrdinalIgnoreCase))
+            throw new IOException("El destino debe usar NTFS o exFAT. FAT32 no admite imágenes grandes. REVIVO-USB no formateará el destino.");
+        if(imageBytes>0 && volume.FreeBytes<checked(imageBytes+256L*1024*1024))throw new IOException("No hay espacio suficiente para la imagen y su registro.");
+    }
+    public static void RequireLocalDisk(string path,int? sourceDisk=null,long imageBytes=0)=>ValidateStorage(InspectStorage(path),sourceDisk,imageBytes);
     public static void RequireInternalDisk(string path)
     {
-        var full = LocalPath(path);
-        var existing = full;
-        while (!File.Exists(existing) && !Directory.Exists(existing))
-            existing = Path.GetDirectoryName(existing) ?? throw new IOException("No se encontró el volumen.");
-        var volume = new StringBuilder(1024);
-        if (!GetVolumePathName(existing, volume, volume.Capacity)) throw new IOException("No se pudo identificar el volumen.");
-        var root = volume.ToString();
-        if (root.Length != 3 || new DriveInfo(root).DriveType != DriveType.Fixed)
-            throw new IOException("Esta versión solo admite imágenes y resultados en un disco interno.");
-        using var handle = CreateFile(@"\\.\" + root[..2], 0, 3, IntPtr.Zero, 3, 0, IntPtr.Zero);
-        if (handle.IsInvalid) throw new IOException("No se pudo comprobar el disco de destino/origen.");
-        var data = new byte[1024];
-        if (!DeviceIoControl(handle, 0x00560000, null, 0, data, data.Length, out var count, IntPtr.Zero) ||
-            count < 32 || BitConverter.ToInt32(data, 0) != 1)
-            throw new IOException("Volumen compuesto o no identificable: operación bloqueada.");
-        var number = BitConverter.ToUInt32(data, 8);
-        using var disk = CreateFile(@"\\.\PhysicalDrive" + number, 0, 3, IntPtr.Zero, 3, 0, IntPtr.Zero);
-        var query = new byte[12];
-        if (disk.IsInvalid || !DeviceIoControl(disk, 0x002D1400, query, query.Length, data, data.Length, out count, IntPtr.Zero) || count < 32)
-            throw new IOException("No se pudo comprobar la conexión del disco.");
-        var bus = BitConverter.ToInt32(data, 28);
-        if (data[10] != 0 || bus is not (1 or 3 or 8 or 10 or 11 or 17))
-            throw new IOException("Disco externo, virtual o de conexión desconocida: usa un disco interno en este MVP.");
+        var volume=InspectStorage(path);
+        ValidateStorage(volume);
+        if(volume.Removable || volume.BusType==7)throw new IOException("Esta operación requiere un disco interno.");
     }
 
     public static string CreateOutput(string parent, string prefix)
     {
         var full = LocalPath(parent);
-        RequireInternalDisk(full);
+        RequireLocalDisk(full);
         Directory.CreateDirectory(full);
         var label=prefix switch { "recuperados"=>"Archivos", "sesion"=>"Analisis", _=>prefix };
         var suffix=Guid.NewGuid().ToString("N")[..8];

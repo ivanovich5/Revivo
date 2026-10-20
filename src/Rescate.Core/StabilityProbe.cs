@@ -9,7 +9,7 @@ public static class StabilityProbe
     {
         if(source.Length!=reference.Length || source.Length<ImageAcquirer.BlockSize || !reference.CanSeek)throw new IOException("La referencia no tiene el tamaño esperado.");
         if(sampleCount<2 || sampleCount>256)throw new IOException("Número de muestras no válido.");
-        evidenceFolder=Safety.LocalPath(evidenceFolder);Safety.RequireInternalDisk(evidenceFolder);Directory.CreateDirectory(evidenceFolder);
+        evidenceFolder=Safety.LocalPath(evidenceFolder);Safety.RequireLocalDisk(evidenceFolder);Directory.CreateDirectory(evidenceFolder);
         int size=ImageAcquirer.BlockSize;long last=source.Length-size;
         var offsets=Enumerable.Range(0,sampleCount).Select(i=>last*i/(sampleCount-1)/4096*4096)
             .Concat(new[]{1432576L/4096*4096,9104896L/4096*4096,16777216L,13570768896L/4096*4096}.Where(x=>x<=last)).Distinct().Order().ToArray();
