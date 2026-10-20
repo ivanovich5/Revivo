@@ -33,3 +33,10 @@ de fuentes correspondientes todavía no está cerrada.
 El inventario SHA-256 del paquete permite vincular esta revisión con los archivos
 concretos. No se asume que una licencia del programa principal cubra todas sus DLL.
 La descarga pública permanece desactivada hasta resolver fuentes y pruebas limpias.
+
+## Actualización: identificación de ntfsprogs
+
+El pendiente de identificación de libntfs se cerró mediante comparación del código
+compilado de ntfsprogs 2.0.0 con ambos motores. Véase
+[el informe y sus evidencias](IDENTIFICACION-NTFSPROGS.md). Este cierre es específico;
+no equivale a certificación jurídica global ni sustituye las pruebas físicas.

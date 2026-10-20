@@ -1,0 +1,310 @@
+{
+  "testdisk_win.exe": {
+    "sha256": "025ea8936765169966fe497b8c46bd5ad16b98b189ee90d6854f063200c95f0c",
+    "sections": [
+      {
+        "object": "libntfs_la-attrib.o",
+        "section": ".text",
+        "bytes": 25130,
+        "compared_bytes": 23294,
+        "match_offset": 280464
+      },
+      {
+        "object": "libntfs_la-attrlist.o",
+        "section": ".text",
+        "bytes": 1362,
+        "compared_bytes": 1198,
+        "match_offset": 305600
+      },
+      {
+        "object": "libntfs_la-bitmap.o",
+        "section": ".text",
+        "bytes": 1048,
+        "compared_bytes": 1016,
+        "match_offset": 376800
+      },
+      {
+        "object": "libntfs_la-bootsect.o",
+        "section": ".text",
+        "bytes": 608,
+        "compared_bytes": 604,
+        "match_offset": 377856
+      },
+      {
+        "object": "libntfs_la-collate.o",
+        "section": ".text",
+        "bytes": 532,
+        "compared_bytes": 480,
+        "match_offset": 378464
+      },
+      {
+        "object": "libntfs_la-compress.o",
+        "section": ".text",
+        "bytes": 2627,
+        "compared_bytes": 2487,
+        "match_offset": 306976
+      },
+      {
+        "object": "libntfs_la-crypto.o",
+        "section": ".text",
+        "bytes": 91,
+        "compared_bytes": 83,
+        "match_offset": 309616
+      },
+      {
+        "object": "libntfs_la-device.o",
+        "section": ".text",
+        "bytes": 2420,
+        "compared_bytes": 2216,
+        "match_offset": 309712
+      },
+      {
+        "object": "libntfs_la-dir.o",
+        "section": ".text",
+        "bytes": 12103,
+        "compared_bytes": 10515,
+        "match_offset": 312144
+      },
+      {
+        "object": "libntfs_la-index.o",
+        "section": ".text",
+        "bytes": 10178,
+        "compared_bytes": 9166,
+        "match_offset": 324256
+      },
+      {
+        "object": "libntfs_la-inode.o",
+        "section": ".text",
+        "bytes": 5912,
+        "compared_bytes": 5280,
+        "match_offset": 334448
+      },
+      {
+        "object": "libntfs_la-lcnalloc.o",
+        "section": ".text",
+        "bytes": 3753,
+        "compared_bytes": 3573,
+        "match_offset": 340368
+      },
+      {
+        "object": "libntfs_la-logfile.o",
+        "section": ".text",
+        "bytes": 3406,
+        "compared_bytes": 2954,
+        "match_offset": 379008
+      },
+      {
+        "object": "libntfs_la-logging.o",
+        "section": ".text",
+        "bytes": 2399,
+        "compared_bytes": 2015,
+        "match_offset": 344128
+      },
+      {
+        "object": "libntfs_la-misc.o",
+        "section": ".text",
+        "bytes": 227,
+        "compared_bytes": 187,
+        "match_offset": 346528
+      },
+      {
+        "object": "libntfs_la-mft.o",
+        "section": ".text",
+        "bytes": 10158,
+        "compared_bytes": 8578,
+        "match_offset": 346768
+      },
+      {
+        "object": "libntfs_la-mst.o",
+        "section": ".text",
+        "bytes": 556,
+        "compared_bytes": 544,
+        "match_offset": 356928
+      },
+      {
+        "object": "libntfs_la-runlist.o",
+        "section": ".text",
+        "bytes": 7468,
+        "compared_bytes": 7200,
+        "match_offset": 357488
+      },
+      {
+        "object": "libntfs_la-security.o",
+        "section": ".text",
+        "bytes": 984,
+        "compared_bytes": 896,
+        "match_offset": null
+      },
+      {
+        "object": "libntfs_la-unistr.o",
+        "section": ".text",
+        "bytes": 2341,
+        "compared_bytes": 2177,
+        "match_offset": 364960
+      },
+      {
+        "object": "libntfs_la-volume.o",
+        "section": ".text",
+        "bytes": 9479,
+        "compared_bytes": 7707,
+        "match_offset": 367312
+      }
+    ],
+    "matched": 20,
+    "total": 21
+  },
+  "photorec_win.exe": {
+    "sha256": "d75b9a6ff60f91479085a578aca518abb1cd7405f24506a61afa2f7e222147bf",
+    "sections": [
+      {
+        "object": "libntfs_la-attrib.o",
+        "section": ".text",
+        "bytes": 25130,
+        "compared_bytes": 23294,
+        "match_offset": 392528
+      },
+      {
+        "object": "libntfs_la-attrlist.o",
+        "section": ".text",
+        "bytes": 1362,
+        "compared_bytes": 1198,
+        "match_offset": 417664
+      },
+      {
+        "object": "libntfs_la-bitmap.o",
+        "section": ".text",
+        "bytes": 1048,
+        "compared_bytes": 1016,
+        "match_offset": 488864
+      },
+      {
+        "object": "libntfs_la-bootsect.o",
+        "section": ".text",
+        "bytes": 608,
+        "compared_bytes": 604,
+        "match_offset": 489920
+      },
+      {
+        "object": "libntfs_la-collate.o",
+        "section": ".text",
+        "bytes": 532,
+        "compared_bytes": 480,
+        "match_offset": 490528
+      },
+      {
+        "object": "libntfs_la-compress.o",
+        "section": ".text",
+        "bytes": 2627,
+        "compared_bytes": 2487,
+        "match_offset": 419040
+      },
+      {
+        "object": "libntfs_la-crypto.o",
+        "section": ".text",
+        "bytes": 91,
+        "compared_bytes": 83,
+        "match_offset": 421680
+      },
+      {
+        "object": "libntfs_la-device.o",
+        "section": ".text",
+        "bytes": 2420,
+        "compared_bytes": 2216,
+        "match_offset": 421776
+      },
+      {
+        "object": "libntfs_la-dir.o",
+        "section": ".text",
+        "bytes": 12103,
+        "compared_bytes": 10515,
+        "match_offset": 424208
+      },
+      {
+        "object": "libntfs_la-index.o",
+        "section": ".text",
+        "bytes": 10178,
+        "compared_bytes": 9166,
+        "match_offset": 436320
+      },
+      {
+        "object": "libntfs_la-inode.o",
+        "section": ".text",
+        "bytes": 5912,
+        "compared_bytes": 5280,
+        "match_offset": 446512
+      },
+      {
+        "object": "libntfs_la-lcnalloc.o",
+        "section": ".text",
+        "bytes": 3753,
+        "compared_bytes": 3573,
+        "match_offset": 452432
+      },
+      {
+        "object": "libntfs_la-logfile.o",
+        "section": ".text",
+        "bytes": 3406,
+        "compared_bytes": 2954,
+        "match_offset": 491072
+      },
+      {
+        "object": "libntfs_la-logging.o",
+        "section": ".text",
+        "bytes": 2399,
+        "compared_bytes": 2015,
+        "match_offset": 456192
+      },
+      {
+        "object": "libntfs_la-misc.o",
+        "section": ".text",
+        "bytes": 227,
+        "compared_bytes": 187,
+        "match_offset": 458592
+      },
+      {
+        "object": "libntfs_la-mft.o",
+        "section": ".text",
+        "bytes": 10158,
+        "compared_bytes": 8578,
+        "match_offset": 458832
+      },
+      {
+        "object": "libntfs_la-mst.o",
+        "section": ".text",
+        "bytes": 556,
+        "compared_bytes": 544,
+        "match_offset": 468992
+      },
+      {
+        "object": "libntfs_la-runlist.o",
+        "section": ".text",
+        "bytes": 7468,
+        "compared_bytes": 7200,
+        "match_offset": 469552
+      },
+      {
+        "object": "libntfs_la-security.o",
+        "section": ".text",
+        "bytes": 984,
+        "compared_bytes": 896,
+        "match_offset": null
+      },
+      {
+        "object": "libntfs_la-unistr.o",
+        "section": ".text",
+        "bytes": 2341,
+        "compared_bytes": 2177,
+        "match_offset": 477024
+      },
+      {
+        "object": "libntfs_la-volume.o",
+        "section": ".text",
+        "bytes": 9479,
+        "compared_bytes": 7707,
+        "match_offset": 479376
+      }
+    ],
+    "matched": 20,
+    "total": 21
+  }
+}
