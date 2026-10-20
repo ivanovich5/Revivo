@@ -4,6 +4,9 @@ Estado: preparación local; no es una certificación jurídica ni autorización 
 
 Actualización: véase [validación del 19 de octubre](VALIDACION-0917.md), con
 pruebas del paquete 0.9.17, dependencias identificadas y pendientes concretos.
+La [revisión de empaquetado r2](EMPAQUETADO-R2.md) documenta las fuentes
+obtenidas, la selección de motores y las pruebas adicionales; la revisión
+de fuentes correspondientes todavía no está cerrada.
 
 | Componente | Evidencia y acción | Pendiente |
 | --- | --- | --- |

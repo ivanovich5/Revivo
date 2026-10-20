@@ -10,11 +10,20 @@
 #ifndef OutputName
 #define OutputName "Revivo-0.9.17-beta-setup"
 #endif
+#ifndef BuildVersion
+#define BuildVersion "0.9.17"
+#endif
+#ifndef BundleSources
+#define BundleSources 1
+#endif
 [Setup]
 AppId={#BuildAppId}
 AppName={#BuildName}
-AppVersion=0.9.17
+AppVersion={#BuildVersion}
 AppPublisher=Proyecto Revivo
+AppPublisherURL=https://revivo.digital/
+AppSupportURL=https://revivo.digital/#feedback
+LicenseFile={#SourceRoot}\LICENSE.txt
 DefaultDirName={localappdata}\Programs\Revivo
 DefaultGroupName=Revivo
 PrivilegesRequired=lowest
@@ -41,7 +50,9 @@ Source: "{#SourceRoot}\scripts\*.py"; DestDir: "{app}\scripts"; Flags: ignorever
 Source: "{#SourceRoot}\scripts\*.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
 Source: "{#SourceRoot}\THIRD_PARTY.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\platform-notices\*"; DestDir: "{app}\platform-notices"; Flags: ignoreversion recursesubdirs
+#if BundleSources
 Source: "{#SourceRoot}\third-party-source\*"; DestDir: "{app}\third-party-source"; Flags: ignoreversion recursesubdirs
+#endif
 Source: "{#SourceRoot}\GUIA-BETA.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceRoot}\LICENSE.txt"; DestDir: "{app}"; Flags: ignoreversion
 [Icons]
