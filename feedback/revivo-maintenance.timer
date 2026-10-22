@@ -1,0 +1,8 @@
+[Unit]
+Description=Daily REVIVO backup
+[Timer]
+OnCalendar=*-*-* 09:15:00 UTC
+RandomizedDelaySec=300
+Persistent=true
+[Install]
+WantedBy=timers.target

@@ -57,3 +57,20 @@ if(supportSection){
  supportSection.querySelectorAll('.donation-options a').forEach(link=>link.addEventListener('click',celebrateSupport));
  reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches)supportSection.querySelector('.support-confetti')?.remove();});
 }
+
+// Aggregate page opens and installer clicks; no cookies or personal data.
+function recordEvent(kind){
+ if(navigator.doNotTrack==='1'||!window.crypto?.randomUUID)return;
+ fetch('/api/events',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({kind,id:crypto.randomUUID()}),keepalive:true}).catch(()=>{});
+}
+recordEvent('visit');
+document.querySelectorAll('a[download][href$="-setup.exe"]').forEach(link=>link.addEventListener('click',event=>{
+ recordEvent('download');
+ if(event.ctrlKey||event.metaKey||event.shiftKey||event.altKey)return;
+ // Keep the native download. Only move the current page after its default action.
+ setTimeout(()=>{
+  const support=document.querySelector('#apoyar');if(!support)return;
+  support.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+  history.replaceState(null,'','#apoyar');
+ },150);
+}));
