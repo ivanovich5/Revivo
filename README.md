@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/revivo-banner.svg" width="100%" alt="REVIVO — Tus archivos, primero. Recuperación USB para Windows 11. Código abierto, beta 0.9.17.">
+  <img src="docs/images/revivo-banner.svg" width="100%" alt="REVIVO — Tus archivos, primero. Recuperación USB para Windows 11. Código abierto, versión 1.0.2.">
 </p>
 
 <p align="center">
@@ -15,7 +15,7 @@
 </p>
 
 > [!NOTE]
-> **Estamos en beta.** Este repositorio contiene el código de REVIVO **0.9.17**, la web y el servicio de feedback. El instalador todavía no está publicado en GitHub Releases: falta completar la revisión de distribución de sus dependencias.
+> **REVIVO-USB 1.0.2 está disponible.** Descarga el instalador, el código fuente correspondiente y las huellas SHA-256 desde [revivo.digital](https://revivo.digital/#descarga). Este repositorio contiene la aplicación, la web y el servicio de feedback. El instalador actual no tiene firma digital; no afirmamos aprobación de ningún proveedor de firma.
 
 ## Una segunda oportunidad para tus archivos
 

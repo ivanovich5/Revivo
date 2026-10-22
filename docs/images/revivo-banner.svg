@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420" role="img" aria-labelledby="title desc">
-<title id="title">REVIVO — Tus archivos, primero.</title><desc id="desc">Recuperación de archivos USB. Windows 11, código abierto, beta 0.9.17. Ilustración conceptual, no captura del programa.</desc>
+<title id="title">REVIVO — Tus archivos, primero.</title><desc id="desc">Recuperación de archivos USB. Windows 11, código abierto, versión 1.0.2. Ilustración conceptual, no captura del programa.</desc>
 <defs><pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse"><rect x="2" y="2" width="2" height="2" fill="#3c3489"/></pattern></defs>
 <rect width="1280" height="420" rx="20" fill="#15132e"/><rect width="1280" height="420" rx="20" fill="url(#dots)" opacity=".55"/>
 <path d="M0 20Q0 0 20 0H1260Q1280 0 1280 20V48H0Z" fill="#26215c"/>
@@ -8,7 +8,7 @@
 <text x="64" y="150" fill="#eeedfe" font-family="monospace" font-size="68" font-weight="bold" letter-spacing="8">REVIVO</text>
 <text x="66" y="201" fill="#f0997b" font-family="sans-serif" font-size="32" font-weight="600">Tus archivos, primero.</text>
 <text x="66" y="247" fill="#c6c2e8" font-family="sans-serif" font-size="22">Una segunda oportunidad para lo que importa.</text>
-<g font-family="monospace" font-size="14"><rect x="66" y="296" width="145" height="38" rx="4" fill="#26215c" stroke="#7166b6"/><text x="138" y="321" text-anchor="middle" fill="#eeedfe">WINDOWS 11</text><rect x="225" y="296" width="165" height="38" rx="4" fill="#26215c" stroke="#7166b6"/><text x="307" y="321" text-anchor="middle" fill="#eeedfe">CÓDIGO ABIERTO</text><rect x="404" y="296" width="145" height="38" rx="4" fill="#f0997b"/><text x="476" y="321" text-anchor="middle" fill="#15132e">BETA 0.9.17</text></g>
+<g font-family="monospace" font-size="14"><rect x="66" y="296" width="145" height="38" rx="4" fill="#26215c" stroke="#7166b6"/><text x="138" y="321" text-anchor="middle" fill="#eeedfe">WINDOWS 11</text><rect x="225" y="296" width="165" height="38" rx="4" fill="#26215c" stroke="#7166b6"/><text x="307" y="321" text-anchor="middle" fill="#eeedfe">CÓDIGO ABIERTO</text><rect x="404" y="296" width="145" height="38" rx="4" fill="#f0997b"/><text x="476" y="321" text-anchor="middle" fill="#15132e">USB 1.0.2</text></g>
 <g transform="translate(832 108)"><path d="M24 0H72V52H24Z" fill="#26215c" stroke="#eeedfe" stroke-width="5"/><path d="M39 13V38M57 13V38" stroke="#afa9ec" stroke-width="6"/><path d="M12 52H84V176H12Z" fill="#1e1b45" stroke="#eeedfe" stroke-width="5"/><path d="M25 112H38L45 89L55 138L63 112H73" fill="none" stroke="#f0997b" stroke-width="5"/>
 <g fill="#f0997b"><rect x="110" y="105" width="9" height="9"/><rect x="132" y="105" width="9" height="9" opacity=".7"/><rect x="154" y="105" width="9" height="9" opacity=".4"/></g>
 <path d="M191 73H229V86H275V155H191Z" fill="#3c3489" transform="translate(8 8)"/><path d="M191 73H229V86H275V155H191Z" fill="#f0997b"/>
