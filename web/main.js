@@ -30,3 +30,30 @@ if(backTop){
  window.addEventListener('pageshow',updateBackTop);
  updateBackTop();
 }
+
+// A brief decorative celebration, never a payment confirmation.
+const supportSection=document.querySelector('#apoyar');
+if(supportSection){
+ const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+ let celebrationTimer;
+ const celebrateSupport=()=>{
+  if(reducedMotion.matches)return;
+  supportSection.querySelector('.support-confetti')?.remove();
+  clearTimeout(celebrationTimer);
+  const layer=document.createElement('div');layer.className='support-confetti';layer.setAttribute('aria-hidden','true');
+  const colors=['#f0997b','#afa9ec','#eeedfe','#ffd680'];
+  for(let i=0;i<32;i++){
+   const piece=document.createElement('i');
+   piece.style.cssText=`left:${4+Math.random()*92}%;--drift:${Math.round(Math.random()*120-60)}px;--spin:${Math.round(Math.random()*540-270)}deg;--delay:${Math.random()*.6}s;background:${colors[i%colors.length]}`;
+   layer.append(piece);
+  }
+  supportSection.append(layer);
+  celebrationTimer=setTimeout(()=>layer.remove(),3000);
+ };
+ if('IntersectionObserver' in window){
+  const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){celebrateSupport();observer.disconnect();}},{threshold:.25});
+  observer.observe(supportSection);
+ }
+ supportSection.querySelectorAll('.donation-options a').forEach(link=>link.addEventListener('click',celebrateSupport));
+ reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches)supportSection.querySelector('.support-confetti')?.remove();});
+}
